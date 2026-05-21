@@ -26,6 +26,18 @@ namespace Kneeboard_Viewer
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // If another instance is already running it answers the pipe.
+            // Surface it and exit instead of opening a second window.
+            if (RemoteControlClient.TrySend(RemoteCommand.Show))
+            {
+                Shutdown();
+                return;
+            }
+
+            base.OnStartup(e);
+        }
     }
 
 }
