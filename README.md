@@ -124,3 +124,10 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this
 program. If not, see <https://www.gnu.org/licenses/>. The full license text is in
 the [LICENSE](LICENSE) file.
+
+## Disclaimer
+
+This has only ever been tested on a single 1080p monitor in portrait orientation.
+Landscape orientation has never been tested, and there is no information on how the
+viewer behaves on a regular monitor setup. Use it on any other configuration at your
+own risk, and expect that the layout and fullscreen behavior may not work as intended.
