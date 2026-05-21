@@ -67,7 +67,7 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
-  if (CurStep = ssInstall) and IsComponentSelected('plugin') then
+  if (CurStep = ssInstall) and WizardIsComponentSelected('plugin') then
     StopStreamDeck;
 end;
 
@@ -75,4 +75,11 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then
     StopStreamDeck;
+end;
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  // With no Stream Deck the plugin component is excluded, leaving only the fixed
+  // app row, so hide the otherwise-pointless component selection page.
+  Result := (PageID = wpSelectComponents) and (not IsStreamDeckInstalled);
 end;
