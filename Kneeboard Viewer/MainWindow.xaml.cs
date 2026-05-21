@@ -32,6 +32,7 @@ public partial class MainWindow : Window
     private AppSettings _settings = new();
     private GlobalHotkeyService? _hotkeys;
     private JoystickService? _joystick;
+    private RemoteControlServer? _remote;
 
     private List<AircraftKneeboard> _aircraft = new();
     private int _tabIndex;
@@ -83,6 +84,11 @@ public partial class MainWindow : Window
         _joystick = new JoystickService(handle);
         _joystick.ActionTriggered += OnRemoteAction;
 
+        _remote = new RemoteControlServer();
+        _remote.CommandReceived += OnRemoteCommand;
+        _remote.Start();
+        WriteAppPathFile();
+
         ApplyInputBindings();
         SetupWatcher();
         BeginLoad(respectFreshness: true);
@@ -102,6 +108,7 @@ public partial class MainWindow : Window
         _watcher?.Dispose();
         _hotkeys?.Dispose();
         _joystick?.Dispose();
+        _remote?.Dispose();
     }
 
     // First run: try to auto-detect DCS folders so the app works out of the box.
@@ -136,6 +143,51 @@ public partial class MainWindow : Window
             case GlobalHotkeyService.IdPrevPage: PrevPage(); break;
             case GlobalHotkeyService.IdNextTab: NextTab(); break;
             case GlobalHotkeyService.IdPrevTab: PrevTab(); break;
+        }
+    }
+
+    // Pipe commands arrive on a background thread; marshal to the UI thread.
+    private void OnRemoteCommand(RemoteCommand command) =>
+        Dispatcher.BeginInvoke(() => HandleRemoteCommand(command));
+
+    private void HandleRemoteCommand(RemoteCommand command)
+    {
+        switch (command)
+        {
+            case RemoteCommand.NextPage: NextPage(); break;
+            case RemoteCommand.PrevPage: PrevPage(); break;
+            case RemoteCommand.NextTab: NextTab(); break;
+            case RemoteCommand.PrevTab: PrevTab(); break;
+            case RemoteCommand.Reload: BeginLoad(respectFreshness: false); break;
+            case RemoteCommand.Quit: Application.Current.Shutdown(); break;
+            case RemoteCommand.Show: BringToFront(); break;
+        }
+    }
+
+    private void BringToFront()
+    {
+        if (WindowState == WindowState.Minimized)
+            WindowState = WindowState.Normal;
+        Show();
+        Activate();
+        Topmost = true;
+        Topmost = false;
+    }
+
+    // The Stream Deck plugin reads this to cold-start the app via its Run key.
+    private static void WriteAppPathFile()
+    {
+        try
+        {
+            Directory.CreateDirectory(AppSettings.AppDataDir);
+            var exePath = Environment.ProcessPath;
+            if (!string.IsNullOrEmpty(exePath))
+                File.WriteAllText(
+                    Path.Combine(AppSettings.AppDataDir, "app-path.txt"), exePath);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("Could not write app-path.txt.", ex);
         }
     }
 
