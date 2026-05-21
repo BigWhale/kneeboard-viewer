@@ -1,0 +1,24 @@
+{
+  "SDKVersion": 2,
+  "UUID": "com.bigwhale.kneeboardviewer",
+  "Author": "David Klasinc",
+  "Name": "Kneeboard Viewer",
+  "Description": "Control DCS Kneeboard Viewer from your Stream Deck.",
+  "Category": "Kneeboard Viewer",
+  "CategoryIcon": "Icons/category",
+  "Icon": "Icons/plugin",
+  "URL": "https://github.com/BigWhale/kneeboard-viewer",
+  "Version": "1.0.0",
+  "CodePath": "KneeboardViewerStreamDeck.exe",
+  "Software": { "MinimumVersion": "6.4" },
+  "OS": [ { "Platform": "windows", "MinimumVersion": "10" } ],
+  "Actions": [
+    { "Name": "Previous Page", "UUID": "com.bigwhale.kneeboardviewer.prevpage", "Icon": "Icons/prevpage", "Tooltip": "Go to the previous kneeboard page", "States": [ { "Image": "Icons/prevpage" } ] },
+    { "Name": "Next Page", "UUID": "com.bigwhale.kneeboardviewer.nextpage", "Icon": "Icons/nextpage", "Tooltip": "Go to the next kneeboard page", "States": [ { "Image": "Icons/nextpage" } ] },
+    { "Name": "Previous Tab", "UUID": "com.bigwhale.kneeboardviewer.prevtab", "Icon": "Icons/prevtab", "Tooltip": "Go to the previous kneeboard tab", "States": [ { "Image": "Icons/prevtab" } ] },
+    { "Name": "Next Tab", "UUID": "com.bigwhale.kneeboardviewer.nexttab", "Icon": "Icons/nexttab", "Tooltip": "Go to the next kneeboard tab", "States": [ { "Image": "Icons/nexttab" } ] },
+    { "Name": "Refresh", "UUID": "com.bigwhale.kneeboardviewer.reload", "Icon": "Icons/reload", "Tooltip": "Reload the latest track", "States": [ { "Image": "Icons/reload" } ] },
+    { "Name": "Run", "UUID": "com.bigwhale.kneeboardviewer.run", "Icon": "Icons/run", "Tooltip": "Launch or focus Kneeboard Viewer", "States": [ { "Image": "Icons/run" } ] },
+    { "Name": "Quit", "UUID": "com.bigwhale.kneeboardviewer.quit", "Icon": "Icons/quit", "Tooltip": "Quit Kneeboard Viewer", "States": [ { "Image": "Icons/quit" } ] }
+  ]
+}
