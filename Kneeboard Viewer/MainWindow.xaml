@@ -1,0 +1,66 @@
+<!--
+Kneeboard Viewer - a viewer for DCS World multiplayer mission kneeboards.
+Copyright (C) 2026 David Klasinc
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+See the LICENSE file in the project root for the full license text.
+-->
+<Window x:Class="Kneeboard_Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kneeboard_Viewer"
+        mc:Ignorable="d"
+        Title="Kneeboard Viewer" Height="950" Width="720"
+        Background="Black"
+        WindowStartupLocation="CenterScreen"
+        KeyDown="Window_KeyDown">
+    <Grid x:Name="RootGrid">
+        <!-- Only the image scales (Viewbox). The tabs and the colored bottom mat
+             are fixed-size overlays positioned against the image's on-screen rect. -->
+        <Viewbox x:Name="CardBox" Stretch="Uniform" Margin="12">
+            <Image x:Name="PageImage" Stretch="None" RenderOptions.BitmapScalingMode="HighQuality"/>
+        </Viewbox>
+
+        <Canvas x:Name="Overlay">
+            <Rectangle x:Name="FootMat"/>
+            <StackPanel x:Name="TabStrip" Orientation="Horizontal"/>
+        </Canvas>
+
+        <Border x:Name="Toolbar" VerticalAlignment="Top" Background="#DD1E1E1E" Padding="8">
+            <DockPanel>
+                <Button Content="About" DockPanel.Dock="Right" Click="About_Click" Padding="10,3"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Aircraft:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <ComboBox x:Name="AircraftBox" Width="150" SelectionChanged="AircraftBox_SelectionChanged"/>
+
+                    <Button Content="◀ Prev" Click="Prev_Click" Margin="12,0,4,0" Padding="10,3"/>
+                    <TextBlock x:Name="PageLabel" Foreground="White" VerticalAlignment="Center"
+                               MinWidth="70" TextAlignment="Center" Text="0 / 0"/>
+                    <Button Content="Next ▶" Click="Next_Click" Margin="4,0" Padding="10,3"/>
+
+                    <Separator Margin="14,0" Width="1" Background="#555"/>
+
+                    <Button Content="Fullscreen" Click="Fullscreen_Click" Margin="0,0" Padding="10,3"/>
+                    <Button Content="Settings" Click="Settings_Click" Margin="6,0" Padding="10,3"/>
+                    <Button Content="Reload" Click="Reload_Click" Margin="0,0" Padding="10,3"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <TextBlock x:Name="StatusText" Foreground="#99FFFFFF" VerticalAlignment="Bottom"
+                   HorizontalAlignment="Left" Margin="8" FontSize="11"/>
+    </Grid>
+</Window>

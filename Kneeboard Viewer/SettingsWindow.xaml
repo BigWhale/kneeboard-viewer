@@ -1,0 +1,156 @@
+<!--
+Kneeboard Viewer - a viewer for DCS World multiplayer mission kneeboards.
+Copyright (C) 2026 David Klasinc
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+See the LICENSE file in the project root for the full license text.
+-->
+<Window x:Class="Kneeboard_Viewer.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="Kneeboard Viewer — Settings"
+        Width="620" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="Section">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,12,0,4"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,3"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="16">
+        <TextBlock Text="DCS folders" Style="{StaticResource Section}"/>
+
+        <TextBlock Text="DCS install directory"/>
+        <Grid Margin="0,2,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="InstallBox" Grid.Column="0" VerticalContentAlignment="Center" Padding="4,3"/>
+            <Button x:Name="InstallBrowse" Grid.Column="1" Content="Browse…" Click="InstallBrowse_Click"/>
+            <Button x:Name="InstallDetect" Grid.Column="2" Content="Auto-detect" Click="InstallDetect_Click"/>
+        </Grid>
+
+        <TextBlock Text="DCS Saved Games directory"/>
+        <Grid Margin="0,2,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="SavedGamesBox" Grid.Column="0" VerticalContentAlignment="Center" Padding="4,3"/>
+            <Button x:Name="SavedGamesBrowse" Grid.Column="1" Content="Browse…" Click="SavedGamesBrowse_Click"/>
+            <Button x:Name="SavedGamesDetect" Grid.Column="2" Content="Auto-detect" Click="SavedGamesDetect_Click"/>
+        </Grid>
+
+        <TextBlock Text="Display" Style="{StaticResource Section}"/>
+        <TextBlock Text="Default monitor (used for fullscreen)"/>
+        <ComboBox x:Name="MonitorBox" Margin="0,2,0,8" DisplayMemberPath="Display" SelectedValuePath="DeviceName"/>
+
+        <CheckBox x:Name="WrapCheck" Margin="0,4,0,0"
+                  Content="Wrap page flipping (next past the last page returns to the first)"/>
+
+        <TextBlock Text="Page-flip keyboard hotkeys (global — work while DCS is focused)" Style="{StaticResource Section}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Next page" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="NextKeyBox" IsReadOnly="True" Margin="0,2"
+                     Padding="4,3" PreviewKeyDown="NextKeyBox_PreviewKeyDown"
+                     GotFocus="KeyBox_GotFocus" LostFocus="KeyBox_LostFocus"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="Clear" Click="NextKeyClear_Click"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Prev page" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="PrevKeyBox" IsReadOnly="True" Margin="0,2"
+                     Padding="4,3" PreviewKeyDown="PrevKeyBox_PreviewKeyDown"
+                     GotFocus="KeyBox_GotFocus" LostFocus="KeyBox_LostFocus"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="Clear" Click="PrevKeyClear_Click"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Next tab" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" x:Name="NextTabKeyBox" IsReadOnly="True" Margin="0,2"
+                     Padding="4,3" PreviewKeyDown="NextTabKeyBox_PreviewKeyDown"
+                     GotFocus="KeyBox_GotFocus" LostFocus="KeyBox_LostFocus"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="Clear" Click="NextTabKeyClear_Click"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Prev tab" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="PrevTabKeyBox" IsReadOnly="True" Margin="0,2"
+                     Padding="4,3" PreviewKeyDown="PrevTabKeyBox_PreviewKeyDown"
+                     GotFocus="KeyBox_GotFocus" LostFocus="KeyBox_LostFocus"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="Clear" Click="PrevTabKeyClear_Click"/>
+        </Grid>
+        <TextBlock Foreground="Gray" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Click a field, then press the key (with optional Ctrl/Alt/Shift). Use keys you don't bind in DCS — the hotkey is captured system-wide."/>
+
+        <TextBlock Text="Page-flip joystick buttons (global)" Style="{StaticResource Section}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Next page" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="NextBtnBox" IsReadOnly="True" Margin="0,2" Padding="4,3"/>
+            <Button Grid.Row="0" Grid.Column="2" x:Name="NextBtnBind" Content="Bind…" Click="NextBtnBind_Click"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="Clear" Click="NextBtnClear_Click"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Prev page" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="PrevBtnBox" IsReadOnly="True" Margin="0,2" Padding="4,3"/>
+            <Button Grid.Row="1" Grid.Column="2" x:Name="PrevBtnBind" Content="Bind…" Click="PrevBtnBind_Click"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="Clear" Click="PrevBtnClear_Click"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Next tab" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" x:Name="NextTabBtnBox" IsReadOnly="True" Margin="0,2" Padding="4,3"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="Bind…" Click="NextTabBtnBind_Click"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="Clear" Click="NextTabBtnClear_Click"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Prev tab" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="PrevTabBtnBox" IsReadOnly="True" Margin="0,2" Padding="4,3"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="Bind…" Click="PrevTabBtnBind_Click"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="Clear" Click="PrevTabBtnClear_Click"/>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Save" Width="90" Click="Save_Click" IsDefault="True"/>
+            <Button Content="Cancel" Width="90" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
