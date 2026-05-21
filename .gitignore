@@ -1,4 +1,6 @@
 # Build results
+publish/
+installer/Output/
 [Bb]in/
 [Oo]bj/
 [Dd]ebug/
