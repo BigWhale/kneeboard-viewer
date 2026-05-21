@@ -147,8 +147,11 @@ public partial class MainWindow : Window
     }
 
     // Pipe commands arrive on a background thread; marshal to the UI thread.
-    private void OnRemoteCommand(RemoteCommand command) =>
-        Dispatcher.BeginInvoke(() => HandleRemoteCommand(command));
+    private void OnRemoteCommand(RemoteCommand command)
+    {
+        if (!Dispatcher.HasShutdownStarted)
+            Dispatcher.BeginInvoke(() => HandleRemoteCommand(command));
+    }
 
     private void HandleRemoteCommand(RemoteCommand command)
     {
