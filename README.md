@@ -16,6 +16,24 @@ on a second screen while you fly.
   joystick buttons.
 - Multi-monitor fullscreen.
 
+## Stream Deck support
+
+The app includes an Elgato Stream Deck plugin with seven key actions: **Run**,
+**Quit**, **Next Page**, **Previous Page**, **Next Tab**, **Previous Tab**, and
+**Refresh**. The plugin talks to the app over a local named pipe, so the keys
+work regardless of which window has focus -- no global keyboard hotkeys are
+involved.
+
+The installer detects whether the Elgato Stream Deck software is present and
+offers to install the plugin alongside the app.
+
+**First-run note:** launch Kneeboard Viewer at least once before using the Run
+key. On startup the app writes its location to
+`%AppData%\KneeboardViewer\app-path.txt` so the plugin can cold-start it later.
+
+For building the plugin or creating the installer bundle see
+`installer/README.md`.
+
 ## How track detection works
 
 DCS writes a new `.trk` track file into `Saved Games\Tracks\Multiplayer` within a
