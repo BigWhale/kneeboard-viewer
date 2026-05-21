@@ -91,7 +91,7 @@ normal. The installer therefore does not need to coordinate the path handoff.
 ### Project
 
 A new project in the solution, `Kneeboard Viewer.StreamDeck`, output bundle id
-`com.davidklasinc.kneeboardviewer.sdPlugin`. Headless console exe (no window)
+`com.bigwhale.kneeboardviewer.sdPlugin`. Headless console exe (no window)
 referencing **BarRaider's StreamDeck-Tools** (MIT, GPLv3-compatible) via NuGet.
 Published **self-contained, single-file, win-x64** so end users need no .NET
 runtime for the plugin. Targets StreamDeck-Tools' supported LTS runtime; mixed
@@ -100,7 +100,7 @@ TFMs alongside the net10 app in one solution are fine.
 ### Actions
 
 Seven `PluginAction` subclasses, one per key, each with a UUID under
-`com.davidklasinc.kneeboardviewer.*` (`.nextpage`, `.prevpage`, `.nexttab`,
+`com.bigwhale.kneeboardviewer.*` (`.nextpage`, `.prevpage`, `.nexttab`,
 `.prevtab`, `.reload`, `.run`, `.quit`). On `KeyPressed`, each opens a
 `NamedPipeClientStream` with a short connect timeout (~300 ms) and writes its
 one-line command. **Run** is the only one with extra logic: try-connect -> if it
