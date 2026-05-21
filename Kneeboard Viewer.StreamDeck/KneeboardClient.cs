@@ -28,6 +28,10 @@ namespace KneeboardViewer.StreamDeck;
 /// </summary>
 internal static class KneeboardClient
 {
+    // Deliberately duplicated from RemoteControlServer.DefaultPipeName in the app.
+    // The plugin is a separate process with no reference to the app assembly, so the
+    // pipe name and the wire command strings ("show", "next-page", ...) are repeated
+    // here on purpose. Update both sides if the pipe name or commands change.
     private const string PipeName = "KneeboardViewer.Remote";
 
     private static string AppPathFile => Path.Combine(
