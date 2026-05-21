@@ -34,6 +34,43 @@ key. On startup the app writes its location to
 For building the plugin or creating the installer bundle see
 `installer/README.md`.
 
+### Sideloading the plugin (from source)
+
+To install the plugin manually, for development or testing, without the installer:
+
+1. Build the bundle from the repository root:
+
+   ```
+   powershell -NoProfile -File "Kneeboard Viewer.StreamDeck\build-plugin.ps1"
+   ```
+
+   If your PowerShell execution policy blocks the script, prepend
+   `-ExecutionPolicy Bypass` (it applies only to that one invocation):
+
+   ```
+   powershell -ExecutionPolicy Bypass -NoProfile -File "Kneeboard Viewer.StreamDeck\build-plugin.ps1"
+   ```
+
+   This produces the bundle at
+   `Kneeboard Viewer.StreamDeck\bin\sdplugin\com.bigwhale.kneeboardviewer.sdPlugin`.
+
+2. Quit the Stream Deck software (right-click its system tray icon, then Quit
+   Stream Deck) so it reloads its plugins on the next start.
+
+3. Copy the bundle folder into the per-user plugins directory, keeping the folder
+   name exactly:
+
+   ```
+   %AppData%\Elgato\StreamDeck\Plugins\com.bigwhale.kneeboardviewer.sdPlugin
+   ```
+
+4. Start Stream Deck. A "Kneeboard Viewer" category with the seven actions
+   appears in the actions list; drag them onto keys.
+
+To update after a rebuild, repeat with Stream Deck closed (or symlink the bundle
+into the plugins folder so rebuilds land in place automatically). Plugin load
+errors are logged under `%AppData%\Elgato\StreamDeck\logs\`.
+
 ## How track detection works
 
 DCS writes a new `.trk` track file into `Saved Games\Tracks\Multiplayer` within a
