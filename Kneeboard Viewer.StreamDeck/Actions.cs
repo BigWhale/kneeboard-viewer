@@ -19,7 +19,11 @@ using BarRaider.SdTools;
 
 namespace KneeboardViewer.StreamDeck;
 
-/// <summary>Common no-op plumbing for our fire-and-forget key actions.</summary>
+/// <summary>
+/// Common no-op plumbing for our fire-and-forget key actions. Each KeyPressed
+/// calls TrySend/RunOrShow and ignores the result: if the viewer is not running
+/// the key simply does nothing, which is the intended behavior.
+/// </summary>
 public abstract class KneeboardActionBase : KeypadBase
 {
     protected KneeboardActionBase(ISDConnection connection, InitialPayload payload)
