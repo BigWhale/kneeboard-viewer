@@ -753,17 +753,21 @@ All seven actions are tiny and share one base, so they live in one file.
 
 Create `Kneeboard Viewer.StreamDeck/Actions.cs` (with the GPLv3 header):
 
+> NOTE (StreamDeck-Tools 7.0.0): all types (`KeypadBase`, `ISDConnection`,
+> `InitialPayload`, `KeyPayload`, `ReceivedSettingsPayload`,
+> `ReceivedGlobalSettingsPayload`, `PluginActionId`) live in the single
+> `BarRaider.SdTools` namespace. The action constructor's first parameter is
+> `ISDConnection` (the interface), not `SDConnection`.
+
 ```csharp
 using BarRaider.SdTools;
-using BarRaider.SdTools.Events;
-using BarRaider.SdTools.Payloads;
 
 namespace KneeboardViewer.StreamDeck;
 
 /// <summary>Common no-op plumbing for our fire-and-forget key actions.</summary>
 public abstract class KneeboardActionBase : KeypadBase
 {
-    protected KneeboardActionBase(SDConnection connection, InitialPayload payload)
+    protected KneeboardActionBase(ISDConnection connection, InitialPayload payload)
         : base(connection, payload) { }
 
     public override void KeyReleased(KeyPayload payload) { }
@@ -776,49 +780,49 @@ public abstract class KneeboardActionBase : KeypadBase
 [PluginActionId("com.bigwhale.kneeboardviewer.nextpage")]
 public class NextPageAction : KneeboardActionBase
 {
-    public NextPageAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public NextPageAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("next-page");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.prevpage")]
 public class PrevPageAction : KneeboardActionBase
 {
-    public PrevPageAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public PrevPageAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("prev-page");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.nexttab")]
 public class NextTabAction : KneeboardActionBase
 {
-    public NextTabAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public NextTabAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("next-tab");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.prevtab")]
 public class PrevTabAction : KneeboardActionBase
 {
-    public PrevTabAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public PrevTabAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("prev-tab");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.reload")]
 public class ReloadAction : KneeboardActionBase
 {
-    public ReloadAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public ReloadAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("reload");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.quit")]
 public class QuitAction : KneeboardActionBase
 {
-    public QuitAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public QuitAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.TrySend("quit");
 }
 
 [PluginActionId("com.bigwhale.kneeboardviewer.run")]
 public class RunAction : KneeboardActionBase
 {
-    public RunAction(SDConnection c, InitialPayload p) : base(c, p) { }
+    public RunAction(ISDConnection c, InitialPayload p) : base(c, p) { }
     public override void KeyPressed(KeyPayload payload) => KneeboardClient.RunOrShow();
 }
 ```
@@ -826,7 +830,7 @@ public class RunAction : KneeboardActionBase
 - [ ] **Step 2: Build to verify it compiles**
 
 Run: `dotnet build "Kneeboard Viewer.StreamDeck/Kneeboard Viewer.StreamDeck.csproj"`
-Expected: Build succeeded. (If the `using BarRaider.SdTools.Events;` / `.Payloads;` namespaces differ in the resolved package version, fix the usings to match where `KeyPayload`, `InitialPayload`, `ReceivedSettingsPayload`, and `ReceivedGlobalSettingsPayload` actually live - IntelliSense/`dotnet build` errors will name them.)
+Expected: Build succeeded. (Verified against StreamDeck-Tools 7.0.0: every type is in `BarRaider.SdTools`, the action constructor takes `ISDConnection`. If a future package version moves types, `dotnet build` errors will name the correct namespaces.)
 
 - [ ] **Step 3: Commit**
 
