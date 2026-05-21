@@ -69,6 +69,14 @@ procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if (CurStep = ssInstall) and WizardIsComponentSelected('plugin') then
     StopStreamDeck;
+  if (CurStep = ssPostInstall) and WizardIsComponentSelected('plugin') then
+  begin
+    // Point the Stream Deck plugin at this installation so its Run key launches
+    // the installed app. The app itself rewrites this file on each launch.
+    ForceDirectories(ExpandConstant('{userappdata}\KneeboardViewer'));
+    SaveStringToFile(ExpandConstant('{userappdata}\KneeboardViewer\app-path.txt'),
+      ExpandConstant('{app}\{#AppExe}'), False);
+  end;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
