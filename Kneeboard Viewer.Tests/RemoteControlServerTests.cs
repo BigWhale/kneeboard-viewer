@@ -43,7 +43,7 @@ public sealed class RemoteControlServerTests
 
         var completed = await Task.WhenAny(tcs.Task, Task.Delay(3000));
         Assert.Same(tcs.Task, completed);
-        Assert.Equal(RemoteCommand.NextTab, tcs.Task.Result);
+        Assert.Equal(RemoteCommand.NextTab, await tcs.Task);
     }
 
     [Fact]

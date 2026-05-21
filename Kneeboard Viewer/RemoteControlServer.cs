@@ -63,11 +63,12 @@ public sealed class RemoteControlServer : IDisposable
             try
             {
                 using (server)
-                // WaitForConnectionAsync does not reliably observe cancellation on
-                // Windows; disposing the stream unblocks it during shutdown.
-                using (ct.Register(() => { try { server.Dispose(); } catch { } }))
                 {
-                    await server.WaitForConnectionAsync(ct);
+                    // Disposing the stream is the only reliable way to unblock
+                    // WaitForConnectionAsync on cancellation; scope the registration
+                    // to the wait so the outer using owns the sole dispose.
+                    using (ct.Register(() => { try { server.Dispose(); } catch { } }))
+                        await server.WaitForConnectionAsync(ct);
 
                     using var reader = new StreamReader(server);
                     var line = await reader.ReadLineAsync(ct);
