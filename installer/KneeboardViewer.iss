@@ -22,6 +22,7 @@ SolidCompression=yes
 WizardStyle=modern
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
+PrivilegesRequired=lowest
 
 [Components]
 Name: "app"; Description: "Kneeboard Viewer"; Types: full custom; Flags: fixed
@@ -40,12 +41,15 @@ Source: "..\Kneeboard Viewer.StreamDeck\bin\sdplugin\{#PluginBundle}\*"; \
     Flags: recursesubdirs ignoreversion; Components: plugin
 
 [Icons]
-Name: "{group}\Kneeboard Viewer"; Filename: "{app}\{#AppExe}"
+Name: "{group}\Kneeboard Viewer"; Filename: "{app}\{#AppExe}"; Components: app
 Name: "{autodesktop}\Kneeboard Viewer"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 Name: "{userstartup}\Kneeboard Viewer"; Filename: "{app}\{#AppExe}"; Tasks: startup
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "Launch Kneeboard Viewer"; Flags: nowait postinstall skipifsilent
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{userappdata}\Elgato\StreamDeck\Plugins\{#PluginBundle}"
 
 [Code]
 function IsStreamDeckInstalled: Boolean;
@@ -64,5 +68,11 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if (CurStep = ssInstall) and IsComponentSelected('plugin') then
+    StopStreamDeck;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usUninstall then
     StopStreamDeck;
 end;

@@ -27,6 +27,8 @@ The result is `installer\Output\KneeboardViewerSetup.exe`.
 
 The Stream Deck plugin component is only offered when the Elgato Stream Deck
 software is detected (`%AppData%\Elgato\StreamDeck` exists). Installing it stops
-`StreamDeck.exe` so the plugin loads on its next launch. The app writes its own
+`StreamDeck.exe` so the plugin loads when Stream Deck next starts (if you have
+disabled Stream Deck auto-start, relaunch it manually). The installer runs
+per-user (no administrator rights required). The app writes its own
 path to `%AppData%\KneeboardViewer\app-path.txt` on first launch, which the
 plugin's Run action uses to cold-start the app.
