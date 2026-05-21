@@ -113,26 +113,9 @@ New-Icon 'quit' { param($g,$pen,$brush,$s)
     [float]$ly2 = $s*0.5
     $g.DrawLine($pen, $cx, $ly1, $cx, $ly2) }
 
-# Plugin / category icon: a generic double-chevron mark.
-function Draw-Chevrons($g, $pen, $s, [bool]$right, [int]$count) {
-    [float]$h      = $s / 2.0
-    [float]$w      = $s * 0.18
-    [float]$spread = $s * 0.16
-    [float]$startX = if ($count -eq 2) { $s * 0.36 } else { $s * 0.5 }
-    for ($i = 0; $i -lt $count; $i++) {
-        [float]$cx   = $startX + ($i * $s * 0.22)
-        [float]$tip  = if ($right) { $cx + $w } else { $cx - $w }
-        [float]$back = if ($right) { $cx - $w } else { $cx + $w }
-        [float]$yTop = $h - $spread
-        [float]$yBot = $h + $spread
-        $g.DrawLines($pen, @(
-            (New-Object System.Drawing.PointF($back, $yTop)),
-            (New-Object System.Drawing.PointF($tip,  $h)),
-            (New-Object System.Drawing.PointF($back, $yBot))))
-    }
-}
-
-New-Icon 'plugin'   { param($g,$pen,$brush,$s) Draw-Chevrons $g $pen $s $true 2 }
-New-Icon 'category' { param($g,$pen,$brush,$s) Draw-Chevrons $g $pen $s $true 2 }
+# Plugin / category icon: the Kneeboard Viewer application icon (this is the
+# icon Stream Deck shows next to the action category and in the plugin list).
+New-Icon 'plugin'   { param($g,$pen,$brush,$s) Draw-AppIcon $g $s $appIco }
+New-Icon 'category' { param($g,$pen,$brush,$s) Draw-AppIcon $g $s $appIco }
 
 Write-Host "Icons written to $outDir"
