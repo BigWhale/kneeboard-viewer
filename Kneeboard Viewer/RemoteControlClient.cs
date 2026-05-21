@@ -35,6 +35,8 @@ public static class RemoteControlClient
         {
             using var client = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
             client.Connect(timeoutMs);
+            // AutoFlush guarantees the line reaches the pipe before the stream is
+            // disposed; the server reads exactly one line per connection.
             using var writer = new StreamWriter(client) { AutoFlush = true };
             writer.WriteLine(RemoteCommands.ToWire(command));
             return true;
