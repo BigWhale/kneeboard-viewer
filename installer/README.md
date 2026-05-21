@@ -5,10 +5,11 @@ Prerequisites: the .NET 10 SDK and [Inno Setup 6](https://jrsoftware.org/isdl.ph
 
 From the repository root:
 
-1. Publish the app (self-contained, no runtime needed on the target machine):
+1. Publish the app (self-contained, no runtime needed on the target machine;
+   debug symbols suppressed for the release):
 
    ```
-   dotnet publish "Kneeboard Viewer/Kneeboard Viewer.csproj" -c Release -r win-x64 --self-contained -o publish\app
+   dotnet publish "Kneeboard Viewer/Kneeboard Viewer.csproj" -c Release -r win-x64 --self-contained -p:DebugType=none -p:DebugSymbols=false -o publish\app
    ```
 
 2. Build the Stream Deck plugin bundle:

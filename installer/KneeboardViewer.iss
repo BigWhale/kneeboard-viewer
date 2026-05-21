@@ -1,6 +1,6 @@
 ; Inno Setup script for Kneeboard Viewer.
 ; Build prerequisites (run from the repo root, see installer/README.md):
-;   dotnet publish "Kneeboard Viewer/Kneeboard Viewer.csproj" -c Release -r win-x64 --self-contained -o publish\app
+;   dotnet publish "Kneeboard Viewer/Kneeboard Viewer.csproj" -c Release -r win-x64 --self-contained -p:DebugType=none -p:DebugSymbols=false -o publish\app
 ;   powershell -NoProfile -File "Kneeboard Viewer.StreamDeck\build-plugin.ps1"
 
 #define AppName "Kneeboard Viewer"
@@ -33,8 +33,8 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 Name: "startup"; Description: "Launch Kneeboard Viewer when Windows starts"; GroupDescription: "Startup:"; Flags: unchecked
 
 [Files]
-; App (self-contained publish output).
-Source: "..\publish\app\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion; Components: app
+; App (self-contained publish output). Exclude debug symbols from the release.
+Source: "..\publish\app\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion; Excludes: "*.pdb"; Components: app
 ; Stream Deck plugin bundle -> per-user Stream Deck plugins folder.
 Source: "..\Kneeboard Viewer.StreamDeck\bin\sdplugin\{#PluginBundle}\*"; \
     DestDir: "{userappdata}\Elgato\StreamDeck\Plugins\{#PluginBundle}"; \
