@@ -66,4 +66,31 @@ public sealed class RemoteControlServerTests
         await Task.Delay(300);
         Assert.False(fired);
     }
+
+    [Fact]
+    public async Task Client_TrySend_DeliversCommandToServer()
+    {
+        var pipeName = "KneeboardViewerTest." + Guid.NewGuid().ToString("N");
+        using var server = new RemoteControlServer(pipeName);
+
+        var tcs = new TaskCompletionSource<RemoteCommand>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+        server.CommandReceived += c => tcs.TrySetResult(c);
+        server.Start();
+
+        var sent = await Task.Run(() =>
+            RemoteControlClient.TrySend(RemoteCommand.Show, pipeName, timeoutMs: 2000));
+
+        Assert.True(sent);
+        var completed = await Task.WhenAny(tcs.Task, Task.Delay(3000));
+        Assert.Same(tcs.Task, completed);
+        Assert.Equal(RemoteCommand.Show, await tcs.Task);
+    }
+
+    [Fact]
+    public void Client_TrySend_ReturnsFalse_WhenNothingListening()
+    {
+        var pipeName = "KneeboardViewerTest." + Guid.NewGuid().ToString("N");
+        Assert.False(RemoteControlClient.TrySend(RemoteCommand.Show, pipeName, timeoutMs: 200));
+    }
 }
