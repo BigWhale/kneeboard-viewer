@@ -47,10 +47,21 @@ public sealed class RemoteCommandTests
 
     [Theory]
     [InlineData(RemoteCommand.NextPage, "next-page")]
-    [InlineData(RemoteCommand.Show, "show")]
+    [InlineData(RemoteCommand.PrevPage, "prev-page")]
+    [InlineData(RemoteCommand.NextTab,  "next-tab")]
+    [InlineData(RemoteCommand.PrevTab,  "prev-tab")]
+    [InlineData(RemoteCommand.Reload,   "reload")]
+    [InlineData(RemoteCommand.Quit,     "quit")]
+    [InlineData(RemoteCommand.Show,     "show")]
     public void ToWire_RoundTrips(RemoteCommand command, string expected)
     {
         Assert.Equal(expected, RemoteCommands.ToWire(command));
         Assert.Equal(command, RemoteCommands.Parse(expected));
+    }
+
+    [Fact]
+    public void ToWire_UnknownValue_Throws()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => RemoteCommands.ToWire((RemoteCommand)99));
     }
 }
